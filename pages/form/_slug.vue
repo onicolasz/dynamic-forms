@@ -1,23 +1,27 @@
 <template>
-  <div id="form-container" :style="{ backgroundColor: apiData.style.bgColor }">
-    <FormHeader
-      class="w-full h-0.5"
-      :activeField="activeField + 1"
-      :maxFields="apiData.fields.length"
-    ></FormHeader>
+  <div
+    id="form-container"
+    :style="{
+      gridTemplateAreas: gridTemplate,
+      backgroundColor: apiData.style.bgColor,
+    }"
+  >
+    <div class="header-container">
+      <FormHeader
+        :activeField="activeField + 1"
+        :maxFields="apiData.fields.length"
+      ></FormHeader>
+    </div>
 
-    <div class="flex min-h-screen">
-      <div class="flex-grow">
-        <FormField
-          class="flex items-center h-full m-2"
-          :apiData="apiData"
-          :activeField="activeField"
-          :previousField="previousField"
-        ></FormField>
-      </div>
-      <div class="flex items-center justify-end">
-        <FormNavbar @increment="increment" @decrement="decrement"></FormNavbar>
-      </div>
+    <div class="field-container">
+      <FormField
+        :apiData="apiData"
+        :activeField="activeField"
+        :previousField="previousField"
+      ></FormField>
+    </div>
+    <div class="nav-container">
+      <FormNavbar @increment="increment" @decrement="decrement"></FormNavbar>
     </div>
   </div>
 </template>
@@ -89,6 +93,7 @@ export default {
       answer: "",
       activeField: 0,
       previousField: 0,
+      gridTemplate: "'header header' 'main-content navbar'",
     };
   },
   methods: {
@@ -111,9 +116,34 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 #form-container {
   overflow: hidden;
   height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr auto;
+}
+
+.header-container {
+  grid-area: header;
+  height: 2px;
+  margin-bottom: 24px;
+}
+
+.field-container {
+  padding: 8px;
+  grid-area: main-content;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-container {
+  grid-area: navbar;
+  height: 100%;
 }
 </style>

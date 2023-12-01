@@ -19,6 +19,8 @@
   "devDependencies": {
     "@nuxtjs/fontawesome": "^1.1.2",
     "@nuxtjs/tailwindcss": "^5.3.3",
-    "postcss": "^8.4.17"
+    "postcss": "^8.4.17",
+    "sass": "^1.69.5",
+    "sass-loader": "10.1.1"
   }
 }

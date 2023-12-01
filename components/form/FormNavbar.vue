@@ -1,5 +1,5 @@
 <template>
-  <div class="m-4" :style="{ color: textColor }">
+  <div class="nav-button-container" :style="{ color: textColor }">
     <div class="nav-button" @click="decrement">
       <font-awesome-icon
         :icon="['fas', 'arrow-up']"
@@ -44,9 +44,31 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss" scoped>
+.nav-button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 8px;
+}
+
 .nav-button {
   cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+  .nav-button {
+    font-size: 40px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .nav-button {
+    font-size: 30px;
+  }
 }
 
 .nav-button:hover {
