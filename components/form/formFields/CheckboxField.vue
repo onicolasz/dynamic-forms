@@ -26,23 +26,38 @@
         v-for="(option, index) in field.options"
         :key="option.id"
         class="checkbox-container"
-        :style="{ color: apiData.style.textColor }"
+        :style="{ color: textColor }"
       >
         <span class="checkbox-marker">{{
           String.fromCharCode(65 + index)
         }}</span>
-        <label :for="getCheckboxId(index)" class="checkbox-label">
+        <label class="checkbox-label">
           <span class="checkbox-text">{{ option.value }}</span>
         </label>
       </div>
     </fieldset>
     <div class="field-container-btn">
-      <button
-        :style="{ backgroundColor: apiData.style.buttonColor }"
-        @click="submitAnswer"
-      >
+      <button :style="{ backgroundColor: buttonColor }" @click="submitAnswer">
         <small v-if="!loading">
-          {{ field.type == "checkbox" ? "Enviar respostas" : "Responder" }}
+          <svg
+            v-if="field.type == 'checkbox'"
+            aria-hidden="true"
+            focusable="false"
+            data-prefix="fas"
+            data-icon="check"
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            class="svg-inline--fa fa-check fa-w-16"
+            data-v-6089a9b6=""
+          >
+            <path
+              fill="currentColor"
+              d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+              class=""
+            ></path>
+          </svg>
+          Enviar respostas
         </small>
         <div v-else class="loading-indicator"></div>
       </button>
@@ -56,47 +71,33 @@ export default {
     field: {
       default: 0,
     },
-    data() {
-      return {
-        isIncreasing: true,
-        loading: false,
-      };
+  },
+  data() {
+    return {
+      isIncreasing: true,
+      loading: false,
+    };
+  },
+  computed: {
+    buttonColor() {
+      return this.$store.state.buttonColor;
     },
-    computed: {
-      buttonColor() {
-        return this.$store.state.buttonColor;
-      },
-      textColor() {
-        return this.$store.state.textColor;
-      },
+    textColor() {
+      return this.$store.state.textColor;
     },
-    methods: {
-      submitAnswer() {
-        this.loading = true;
-      },
-      getCheckboxId(index) {
-        return "checkbox" + index;
-      },
+  },
+  methods: {
+    submitAnswer() {
+      this.loading = true;
     },
   },
 };
 </script>
 <style lang="scss">
+@import "../../../assets/css/main.scss";
+
 .field-container-btn button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: fit-content;
-  padding: 2px 4px 2px 4px;
-  margin-top: 8px;
-  display: inline;
-  border: none;
-  border-radius: 2px;
-  box-shadow: 6px;
-  font-size: 85%;
-  text-align: center;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  @include button-properties;
 }
 
 .legend-text {
@@ -112,6 +113,23 @@ export default {
   padding: 2px;
   padding-left: 4px;
   margin-bottom: 4px;
+  cursor: pointer;
+}
+
+.checkbox-container:hover {
+  background-color: #ffffff18;
+  .checkbox-marker {
+    border: 0.5px solid #ffffff;
+  }
+}
+
+.checkbox-container:active {
+  background-color: #ffffff18;
+  font-weight: bold;
+  .checkbox-marker {
+    background-color: #ffffff;
+    color: gray;
+  }
 }
 
 .checkbox-marker {
@@ -122,7 +140,6 @@ export default {
   height: 10px;
   background-color: #ffffff18;
   border-radius: 1px;
-  cursor: pointer;
   margin-right: 5px;
 }
 
@@ -130,7 +147,6 @@ export default {
   display: flex;
   align-items: center;
   font-size: 90%;
-  cursor: pointer;
 }
 
 .loading-indicator {

@@ -20,38 +20,40 @@ export default {
     field: {
       default: 0,
     },
-    data() {
-      return {
-        isIncreasing: true,
-        loading: false,
-        textRules: [(v) => !!v || "Resposta é necessária"],
-        emailRules: [
-          (v) =>
-            (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
-              v
-            ) &&
-              v != null) ||
-            "Email Incorreto",
-        ],
-      };
+  },
+  data() {
+    return {
+      isIncreasing: true,
+      loading: false,
+      textRules: [(v) => !!v || "Resposta é necessária"],
+      emailRules: [
+        (v) =>
+          (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+            v
+          ) &&
+            v != null) ||
+          "Email Incorreto",
+      ],
+    };
+  },
+  computed: {
+    buttonColor() {
+      return this.$store.state.buttonColor;
     },
-    computed: {
-      buttonColor() {
-        return this.$store.state.buttonColor;
-      },
-      textColor() {
-        return this.$store.state.textColor;
-      },
+    textColor() {
+      return this.$store.state.textColor;
     },
-    methods: {
-      submitAnswer() {
-        this.loading = true;
-      },
+  },
+  methods: {
+    submitAnswer() {
+      this.loading = true;
     },
   },
 };
 </script>
 <style lang="scss">
+@import "../../../assets/css/main.scss";
+
 input {
   border: none;
   outline: none;
@@ -64,35 +66,23 @@ input {
   font-size: 90%;
 
   ::placeholder {
-    color: #ffffff07;
+    color: rgba(0, 0, 0, 0.267);
   }
 }
 
 .field-container-btn button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: fit-content;
-  padding: 2px 4px 2px 4px;
-  margin-top: 8px;
-  display: inline;
-  border: none;
-  border-radius: 2px;
-  box-shadow: 6px;
-  font-size: 85%;
-  text-align: center;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  @include button-properties;
 }
 
 .loading-indicator {
+  margin-left: 10px !important;
+  margin-right: 10px !important;
   border: 1px solid #ffffff;
   border-top: 4px solid transparent;
   border-radius: 50%;
   width: 11px;
   height: 11px;
   animation: spin 1s linear infinite;
-  margin: auto;
 }
 
 @keyframes spin {
