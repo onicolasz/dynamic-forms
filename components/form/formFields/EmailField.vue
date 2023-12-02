@@ -10,7 +10,7 @@
       }"
     />
     <div class="error-message" v-if="!valid">Informe um E-mail válido.</div>
-    <SubmitButton text="Responder" @submit="submitAnswer" />
+    <SubmitButton text="Responder" :loading="loading" @submit="submitAnswer" />
   </div>
 </template>
 <script>
@@ -32,7 +32,7 @@ export default {
     return {
       isIncreasing: true,
       loading: false,
-      answer: null,
+      answer: "",
       valid: true,
       emailRule:
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
@@ -48,13 +48,10 @@ export default {
   },
   methods: {
     submitAnswer() {
-      this.loading = true;
-
       if (!this.emailRule.test(this.answer)) {
-        this.valid = false;
-        return (this.loading = false);
+        return (this.valid = false);
       }
-
+      this.loading = true;
       return this.$emit("submitAnswer", {
         fieldId: this.field.id,
         answer: this.answer,
@@ -76,7 +73,7 @@ input {
   padding: 2px 0;
   position: relative;
   width: 100%;
-  font-size: 90%;
+  font-size: 1.5vw;
 
   ::placeholder {
     color: rgba(0, 0, 0, 0.267);

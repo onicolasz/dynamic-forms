@@ -10,7 +10,11 @@
       }"
     />
     <div class="error-message" v-if="!valid">Essa resposta é obrigatória.</div>
-    <SubmitButton text="Responder" @submit="submitAnswer" />
+    <SubmitButton
+      text="Responder"
+      @submit="submitAnswer"
+      :loading="loading"
+    ></SubmitButton>
   </div>
 </template>
 <script>
@@ -46,9 +50,8 @@ export default {
   },
   methods: {
     submitAnswer() {
-      this.loading = true;
-
       if (this.answer !== null && this.answer.trim() !== "") {
+        this.loading = true;
         return this.$emit("submitAnswer", {
           fieldId: this.field.id,
           answer: this.answer,
@@ -56,11 +59,12 @@ export default {
       }
 
       this.valid = false;
-      this.loading = false;
     },
   },
   mounted() {
-    this.answer = this.formAnswer.answer;
+    if (this.formAnswer.answer) {
+      this.answer = this.formAnswer.answer;
+    }
   },
 };
 </script>
@@ -74,7 +78,7 @@ input {
   padding: 2px 0;
   position: relative;
   width: 100%;
-  font-size: 90%;
+  font-size: 1.5vw;
 
   ::placeholder {
     color: rgba(0, 0, 0, 0.267);

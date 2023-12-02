@@ -28,6 +28,20 @@
         </div>
       </div>
     </div>
+    <div
+      class="thank-you-item"
+      :style="{ color: apiData.style.textColor }"
+      v-if="lastIndex"
+    >
+      <font-awesome-icon
+        :icon="['fas', 'paper-plane']"
+        class="thank-you-icon"
+      ></font-awesome-icon>
+      <p class="thank-you-title">Obrigado por participar!</p>
+      <p class="thank-you-description">
+        Sua opinião é muito importante pra gente.
+      </p>
+    </div>
   </transition>
 </template>
 <script>
@@ -51,6 +65,9 @@ export default {
     previousField: {
       default: 0,
     },
+    lastIndex: {
+      default: 0,
+    },
   },
   data() {
     return {
@@ -65,25 +82,34 @@ export default {
     },
   },
   methods: {
-    submitAnswer(answer) {
-      console.log(this.formAnswers);
-      console.log(answer.id);
+    async submitAnswer(answer) {
       const index = this.formAnswers.findIndex(
         (item) => item.fieldId == answer.fieldId
       );
-      console.log(index);
+
+      const body = {
+        formId: this.apiData.id,
+        fieldId: answer.fieldId,
+        value: answer.answer,
+      };
+
       if (index !== -1) {
         this.formAnswers[index] = answer;
-        console.log(this.formAnswers);
-        return this.$emit("increment");
+        return await this.$axios
+          .put(`/respondents/${body.formId}`, body)
+          .then(() => {
+            this.$emit("increment");
+          });
       }
 
       this.formAnswers.push(answer);
       console.log(this.formAnswers);
-      return this.$emit("increment");
+      return await this.$axios.post(`/respondents`, body).then(() => {
+        this.$emit("increment");
+      });
     },
     getCheckboxId(index) {
-      return "checkbox" + index;
+      return "check6vwbox" + index;
     },
     getFieldComponent(fieldType) {
       switch (fieldType) {
@@ -105,7 +131,27 @@ export default {
   width: 55%;
 }
 
+.thank-you-item {
+  text-align: center;
+}
+
+.thank-you-title {
+  font-size: 1.6vw;
+  margin-bottom: 1vw;
+}
+
+.thank-you-description {
+  font-size: 1.2vw;
+  margin-bottom: 1vw;
+}
+
+.thank-you-icon {
+  font-size: 4.5vw;
+  margin-bottom: 3vw;
+}
+
 .question-title {
+  font-size: 1.6vw;
   margin-bottom: 1vw;
 }
 

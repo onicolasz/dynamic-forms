@@ -10,6 +10,7 @@
       <FormHeader
         :activeField="activeField + 1"
         :maxFields="apiData.fields.length"
+        v-if="!lastIndex"
       ></FormHeader>
     </div>
 
@@ -18,12 +19,17 @@
         :apiData="apiData"
         :activeField="activeField"
         :previousField="previousField"
+        :lastIndex="lastIndex"
         @increment="increment"
         @decrement="decrement"
       ></FormField>
     </div>
     <div class="nav-container">
-      <FormNavbar @increment="increment" @decrement="decrement"></FormNavbar>
+      <FormNavbar
+        @increment="increment"
+        @decrement="decrement"
+        v-if="!lastIndex"
+      ></FormNavbar>
     </div>
   </div>
 </template>
@@ -56,6 +62,11 @@ export default {
       gridTemplate: "'header header' 'main-content navbar'",
     };
   },
+  computed: {
+    lastIndex() {
+      return this.activeField == this.apiData.fields.length;
+    },
+  },
   methods: {
     decrement() {
       if (this.activeField > 0) {
@@ -64,7 +75,7 @@ export default {
       }
     },
     increment() {
-      if (this.activeField < this.apiData.fields.length - 1) {
+      if (this.activeField < this.apiData.fields.length) {
         this.previousField = this.activeField;
         this.activeField = this.activeField + 1;
       }

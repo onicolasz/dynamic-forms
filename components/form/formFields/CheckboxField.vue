@@ -5,20 +5,10 @@
         class="legend-text mb-2"
         :style="{ color: textColor, opacity: 0.7 }"
       >
-        <svg
-          data-v-2c277c32=""
-          data-prefix="fas"
-          data-icon="list"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 512 512"
-          class="svg-inline--fa fa-list fa-w-18"
-        >
-          <path
-            fill="currentColor"
-            d="M80 368H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm0-320H16A16 16 0 0 0 0 64v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16V64a16 16 0 0 0-16-16zm0 160H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm416 176H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z"
-            class=""
-          ></path>
-        </svg>
+        <font-awesome-icon
+          :icon="['fas', 'list']"
+          style="width: 1vw; height: 1vw"
+        ></font-awesome-icon>
         Selecione quantos itens desejar.
       </legend>
 
@@ -40,9 +30,11 @@
         </label>
       </div>
     </fieldset>
+    <div class="error-message" v-if="!valid">Essa resposta é obrigatória.</div>
     <SubmitButton
       text="Enviar respostas"
       prefix="check"
+      :loading="loading"
       @submit="submitAnswer"
     />
   </div>
@@ -58,12 +50,16 @@ export default {
     field: {
       default: 0,
     },
+    formAnswer: {
+      default: Object,
+    },
   },
   data() {
     return {
       isIncreasing: true,
       loading: false,
       selected: [],
+      valid: true,
     };
   },
   computed: {
@@ -76,7 +72,15 @@ export default {
   },
   methods: {
     submitAnswer() {
-      this.loading = true;
+      if (this.selected.length > 0) {
+        this.loading = true;
+        return this.$emit("submitAnswer", {
+          fieldId: this.field.id,
+          answer: this.selected,
+        });
+      }
+
+      this.valid = false;
     },
     selectOption(option) {
       if (option.isActive) {
@@ -88,6 +92,13 @@ export default {
       return this.selected.push(option);
     },
   },
+  mounted() {
+    if (this.formAnswer.answer) {
+      this.formAnswer.answer.map((item) => {
+        this.selected.push(item);
+      });
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -97,8 +108,14 @@ export default {
   @include button-properties;
 }
 
-.legend-text {
-  font-size: 1vw;
+.error-message {
+  color: $color-error;
+  font-size: 0.9vw;
+}
+
+legend {
+  font-size: 0.9vw;
+  margin-bottom: 8px;
 }
 
 .checkbox-container {
@@ -108,7 +125,7 @@ export default {
   border: 0.5px solid #ffffff;
   border-radius: 5px;
   padding: 5px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   cursor: pointer;
 }
 
@@ -142,7 +159,7 @@ export default {
 .checkbox-text {
   display: flex;
   align-items: center;
-  font-size: 90%;
+  font-size: 1.4vw;
 }
 
 @media screen and (max-width: 768px) {
