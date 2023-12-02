@@ -50,24 +50,24 @@ export default {
   flex-direction: column;
   justify-content: center;
   height: 100%;
-  padding: 8px;
+  padding: 16px;
 }
 
 .nav-button {
   cursor: pointer;
-  font-size: 16px;
+  font-size: 2.4vw;
   font-weight: bold;
 }
 
 @media screen and (max-width: 768px) {
   .nav-button {
-    font-size: 40px;
+    font-size: 8vw;
   }
 }
 
 @media screen and (max-width: 480px) {
   .nav-button {
-    font-size: 30px;
+    font-size: 8vw;
   }
 }
 

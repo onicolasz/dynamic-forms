@@ -1,6 +1,9 @@
 <template>
   <div class="header-container">
-    <div class="background-div"></div>
+    <div
+      class="background-div"
+      :style="{ backgroundColor: 'rgba(' + hexToRgb(textColor) + ', 0.3)' }"
+    ></div>
     <div
       v-for="index in maxFields"
       :key="index"
@@ -25,6 +28,9 @@ export default {
     color() {
       return this.$store.state.buttonColor;
     },
+    textColor() {
+      return this.$store.state.textColor;
+    },
   },
   methods: {
     getProgressBarStyle(index) {
@@ -40,6 +46,19 @@ export default {
         transform: `scaleX(${scale})`,
         transition: "transform 0.5s ease-in-out",
       };
+    },
+    hexToRgb(hex) {
+      // Remova o # se presente
+      hex = hex.replace(/^#/, "");
+
+      // Divida a cor em componentes r, g, b
+      let bigint = parseInt(hex, 16);
+      let r = (bigint >> 16) & 255;
+      let g = (bigint >> 8) & 255;
+      let b = bigint & 255;
+
+      // Retorne a cor no formato RGB
+      return r + "," + g + "," + b;
     },
   },
 };
@@ -59,7 +78,6 @@ export default {
 .background-div {
   width: 100%;
   height: 100%;
-  background-color: rgba(225, 255, 255, 0.3);
   position: absolute;
   z-index: 1;
 }

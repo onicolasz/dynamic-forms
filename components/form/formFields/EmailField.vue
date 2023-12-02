@@ -1,7 +1,7 @@
 <template>
   <div class="field-input-container">
     <input
-      placeholder="Sua resposta..."
+      placeholder="exemplo@exemplo.com"
       class="field-text"
       v-model="answer"
       :style="{
@@ -9,7 +9,7 @@
         borderBottom: '0.5px solid ' + textColor,
       }"
     />
-    <div class="error-message" v-if="!valid">Essa resposta é obrigatória.</div>
+    <div class="error-message" v-if="!valid">Informe um E-mail válido.</div>
     <SubmitButton text="Responder" @submit="submitAnswer" />
   </div>
 </template>
@@ -17,9 +17,6 @@
 import SubmitButton from "./SubmitButton.vue";
 export default {
   name: "TextField",
-  components: {
-    SubmitButton,
-  },
   props: {
     field: {
       default: 0,
@@ -28,12 +25,17 @@ export default {
       default: Object,
     },
   },
+  components: {
+    SubmitButton,
+  },
   data() {
     return {
       isIncreasing: true,
       loading: false,
-      valid: true,
       answer: null,
+      valid: true,
+      emailRule:
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
     };
   },
   computed: {
@@ -48,15 +50,15 @@ export default {
     submitAnswer() {
       this.loading = true;
 
-      if (this.answer !== null && this.answer.trim() !== "") {
-        return this.$emit("submitAnswer", {
-          fieldId: this.field.id,
-          answer: this.answer,
-        });
+      if (!this.emailRule.test(this.answer)) {
+        this.valid = false;
+        return (this.loading = false);
       }
 
-      this.valid = false;
-      this.loading = false;
+      return this.$emit("submitAnswer", {
+        fieldId: this.field.id,
+        answer: this.answer,
+      });
     },
   },
   mounted() {

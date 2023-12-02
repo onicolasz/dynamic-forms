@@ -26,6 +26,10 @@
         v-for="(option, index) in field.options"
         :key="option.id"
         class="checkbox-container"
+        @click="selectOption(option)"
+        :class="{
+          active: option.isActive,
+        }"
         :style="{ color: textColor }"
       >
         <span class="checkbox-marker">{{
@@ -36,37 +40,20 @@
         </label>
       </div>
     </fieldset>
-    <div class="field-container-btn">
-      <button :style="{ backgroundColor: buttonColor }" @click="submitAnswer">
-        <small v-if="!loading">
-          <svg
-            v-if="field.type == 'checkbox'"
-            aria-hidden="true"
-            focusable="false"
-            data-prefix="fas"
-            data-icon="check"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            class="svg-inline--fa fa-check fa-w-16"
-            data-v-6089a9b6=""
-          >
-            <path
-              fill="currentColor"
-              d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
-              class=""
-            ></path>
-          </svg>
-          Enviar respostas
-        </small>
-        <div v-else class="loading-indicator"></div>
-      </button>
-    </div>
+    <SubmitButton
+      text="Enviar respostas"
+      prefix="check"
+      @submit="submitAnswer"
+    />
   </div>
 </template>
 <script>
+import SubmitButton from "./SubmitButton.vue";
 export default {
   name: "FormField",
+  components: {
+    SubmitButton,
+  },
   props: {
     field: {
       default: 0,
@@ -76,6 +63,7 @@ export default {
     return {
       isIncreasing: true,
       loading: false,
+      selected: [],
     };
   },
   computed: {
@@ -90,10 +78,19 @@ export default {
     submitAnswer() {
       this.loading = true;
     },
+    selectOption(option) {
+      if (option.isActive) {
+        this.$set(option, "isActive", false);
+        const index = this.selected.findIndex((item) => (item.id = option.id));
+        return this.selected.slice(index, 1);
+      }
+      this.$set(option, "isActive", true);
+      return this.selected.push(option);
+    },
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../../../assets/css/main.scss";
 
 .field-container-btn button {
@@ -101,7 +98,7 @@ export default {
 }
 
 .legend-text {
-  font-size: 6px;
+  font-size: 1vw;
 }
 
 .checkbox-container {
@@ -109,10 +106,9 @@ export default {
   align-items: center;
   width: 100%;
   border: 0.5px solid #ffffff;
-  border-radius: 2px;
-  padding: 2px;
-  padding-left: 4px;
-  margin-bottom: 4px;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 6px;
   cursor: pointer;
 }
 
@@ -123,7 +119,7 @@ export default {
   }
 }
 
-.checkbox-container:active {
+.checkbox-container.active {
   background-color: #ffffff18;
   font-weight: bold;
   .checkbox-marker {
@@ -135,11 +131,11 @@ export default {
 .checkbox-marker {
   align-items: center;
   text-align: center;
-  font-size: 60%;
-  width: 10px;
-  height: 10px;
+  font-size: 1vw;
+  width: 1.5vw;
+  height: 1.5vw;
   background-color: #ffffff18;
-  border-radius: 1px;
+  border-radius: 4px;
   margin-right: 5px;
 }
 
@@ -149,49 +145,43 @@ export default {
   font-size: 90%;
 }
 
-.loading-indicator {
-  border: 1px solid #ffffff;
-  border-top: 4px solid transparent;
-  border-radius: 50%;
-  width: 11px;
-  height: 11px;
-  animation: spin 1s linear infinite;
-  margin: auto;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 @media screen and (max-width: 768px) {
-  .loading-indicator {
-    width: 20px;
-    height: 20px;
+  .legend-text {
+    font-size: 3vw;
+  }
+
+  .checkbox-marker {
+    width: 4vw;
+    height: 4vw;
+    font-size: 3vw;
+  }
+
+  .checkbox-text {
+    font-size: 4vw;
   }
 
   .field-container-btn button {
-    width: 100%;
-    max-width: 100px;
-    font-size: 38px;
+    font-size: 4vw;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .loading-indicator {
-    width: 20px;
-    height: 20px;
+  .legend-text {
+    font-size: 3vw;
+  }
+
+  .checkbox-marker {
+    width: 4vw;
+    height: 4vw;
+    font-size: 3vw;
+  }
+
+  .checkbox-text {
+    font-size: 4vw;
   }
 
   .field-container-btn button {
-    width: 100%;
-    max-width: 90px;
-    font-size: 18px;
+    font-size: 4vw;
   }
 }
 </style>
