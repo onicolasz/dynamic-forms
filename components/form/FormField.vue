@@ -21,9 +21,13 @@
         <div class="field-group">
           <component
             :is="getFieldComponent(field.type)"
+            :presets="getFieldPresets(field.type)"
             :field="field"
             :formAnswer="formAnswers[index]"
+            :valid="valid"
+            :loading="loading"
             @submitAnswer="submitAnswer"
+            @updateValid="updateValid"
           />
         </div>
       </div>
@@ -47,13 +51,11 @@
 <script>
 import TextField from "./formFields/TextField.vue";
 import CheckboxField from "./formFields/CheckboxField.vue";
-import EmailField from "./formFields/EmailField.vue";
 export default {
   name: "FormField",
   components: {
     TextField,
     CheckboxField,
-    EmailField,
   },
   props: {
     apiData: {
@@ -68,12 +70,24 @@ export default {
     lastIndex: {
       default: 0,
     },
+    formAnswers: {
+      default: null,
+    },
+    valid: {
+      default: true,
+    },
+    loading: {
+      default: false,
+    },
   },
   data() {
     return {
       isIncreasing: true,
-      loading: false,
-      formAnswers: [],
+      presets: {
+        rules: null,
+        buttonText: null,
+        buttonPrefix: null,
+      },
     };
   },
   watch: {
@@ -83,30 +97,7 @@ export default {
   },
   methods: {
     async submitAnswer(answer) {
-      const index = this.formAnswers.findIndex(
-        (item) => item.fieldId == answer.fieldId
-      );
-
-      const body = {
-        formId: this.apiData.id,
-        fieldId: answer.fieldId,
-        value: answer.answer,
-      };
-
-      if (index !== -1) {
-        this.formAnswers[index] = answer;
-        return await this.$axios
-          .put(`/respondents/${body.formId}`, body)
-          .then(() => {
-            this.$emit("increment");
-          });
-      }
-
-      this.formAnswers.push(answer);
-      console.log(this.formAnswers);
-      return await this.$axios.post(`/respondents`, body).then(() => {
-        this.$emit("increment");
-      });
+      await this.$emit("submitAnswer", answer);
     },
     getCheckboxId(index) {
       return "check6vwbox" + index;
@@ -116,12 +107,31 @@ export default {
         case "text":
           return TextField;
         case "email":
-          return EmailField;
+          return TextField;
         case "checkbox":
           return CheckboxField;
         default:
           return TextField;
       }
+    },
+    getFieldPresets(fieldType) {
+      switch (fieldType) {
+        case "text":
+          return {
+            rules: "text",
+            buttonText: "Responder",
+          };
+        case "email":
+          return {
+            rules: "email",
+            buttonText: "Responder",
+          };
+        default:
+          return {};
+      }
+    },
+    updateValid(value) {
+      return this.$emit("updateValid", value);
     },
   },
 };

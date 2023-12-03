@@ -53,13 +53,17 @@ export default {
     formAnswer: {
       default: Object,
     },
+    valid: {
+      default: false,
+    },
+    loading: {
+      default: false,
+    },
   },
   data() {
     return {
       isIncreasing: true,
-      loading: false,
       selected: [],
-      valid: true,
     };
   },
   computed: {
@@ -86,16 +90,32 @@ export default {
       if (option.isActive) {
         this.$set(option, "isActive", false);
         const index = this.selected.findIndex((item) => (item.id = option.id));
-        return this.selected.slice(index, 1);
+        this.selected.slice(index, 1);
+        return this.$store.commit("setSubmitRequest", {
+          fieldId: this.field.id,
+          answer: this.selected,
+          valid: this.selected.length > 0,
+        });
       }
       this.$set(option, "isActive", true);
-      return this.selected.push(option);
+      this.selected.push(option);
+      return this.$store.commit("setSubmitRequest", {
+        fieldId: this.field.id,
+        answer: this.selected,
+        valid: this.selected.length > 0,
+      });
     },
   },
   mounted() {
     if (this.formAnswer.answer) {
       this.formAnswer.answer.map((item) => {
         this.selected.push(item);
+      });
+
+      this.$store.commit("setSubmitRequest", {
+        fieldId: this.field.id,
+        answer: this.selected,
+        valid: this.selected.length > 0,
       });
     }
   },

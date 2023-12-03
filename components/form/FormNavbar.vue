@@ -22,6 +22,9 @@ export default {
     styles: {
       default: null,
     },
+    valid: {
+      default: true,
+    },
   },
   data() {
     return {};
@@ -39,7 +42,16 @@ export default {
       this.$emit("decrement");
     },
     increment() {
-      this.$emit("increment");
+      if (
+        this.$store.state.submitRequest &&
+        this.$store.state.submitRequest.valid
+      ) {
+        this.$emit("updateValid", true);
+        console.log(this.valid);
+        return this.$emit("submitAnswer", this.$store.state.submitRequest);
+      }
+      console.log(this.valid);
+      return this.$emit("updateValid", false);
     },
   },
 };

@@ -30,6 +30,16 @@
     }
 }
 
+@mixin text-error-message {
+    background-color: $color-error;
+    color: $color-white;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width: fit-content;
+    padding: 4px;
+    font-size: 0.8vw;
+}
+
 * {
     margin: 0;
     padding: 0;

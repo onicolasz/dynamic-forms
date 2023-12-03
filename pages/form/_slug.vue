@@ -20,14 +20,20 @@
         :activeField="activeField"
         :previousField="previousField"
         :lastIndex="lastIndex"
-        @increment="increment"
+        :formAnswers="formAnswers"
+        :valid="valid"
+        :loading="loading"
         @decrement="decrement"
+        @submitAnswer="submitAnswer"
+        @updateValid="updateValid"
       ></FormField>
     </div>
     <div class="nav-container">
       <FormNavbar
-        @increment="increment"
         @decrement="decrement"
+        @submitAnswer="submitAnswer"
+        @updateValid="updateValid"
+        :valid="valid"
         v-if="!lastIndex"
       ></FormNavbar>
     </div>
@@ -60,6 +66,9 @@ export default {
       activeField: 0,
       previousField: 0,
       gridTemplate: "'header header' 'main-content navbar'",
+      formAnswers: [],
+      valid: true,
+      loading: false,
     };
   },
   computed: {
@@ -79,6 +88,48 @@ export default {
         this.previousField = this.activeField;
         this.activeField = this.activeField + 1;
       }
+    },
+    async submitAnswer(answer) {
+      this.loading = true;
+      const index = this.formAnswers.findIndex(
+        (item) => item.fieldId == answer.fieldId
+      );
+
+      console.log(index);
+
+      const body = {
+        formId: this.apiData.id,
+        fieldId: answer.fieldId,
+        value: answer.answer,
+      };
+
+      if (index !== -1) {
+        this.formAnswers = this.formAnswers.map((item) =>
+          item.fieldId === answer.fieldId ? answer : item
+        );
+        await this.$axios
+          .put(
+            `https://jsonplaceholder.typicode.com/posts/${body.formId}`,
+            body
+          )
+          .then(() => {
+            this.loading = false;
+            this.increment();
+          });
+        return this.$store.commit("setSubmitRequest", null);
+      }
+
+      this.formAnswers.push(answer);
+      await this.$axios
+        .post("https://jsonplaceholder.typicode.com/posts", body)
+        .then(() => {
+          this.loading = false;
+          this.increment();
+        });
+      return this.$store.commit("setSubmitRequest", null);
+    },
+    updateValid(value) {
+      this.valid = value;
     },
   },
   async created() {

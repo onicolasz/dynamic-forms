@@ -48,16 +48,13 @@ export default {
       };
     },
     hexToRgb(hex) {
-      // Remova o # se presente
       hex = hex.replace(/^#/, "");
 
-      // Divida a cor em componentes r, g, b
       let bigint = parseInt(hex, 16);
       let r = (bigint >> 16) & 255;
       let g = (bigint >> 8) & 255;
       let b = bigint & 255;
 
-      // Retorne a cor no formato RGB
       return r + "," + g + "," + b;
     },
   },

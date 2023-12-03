@@ -4,6 +4,8 @@
       placeholder="Sua resposta..."
       class="field-text"
       v-model="answer"
+      @change="updateRequest"
+      @keyup.enter="submitAnswer"
       :style="{
         color: textColor,
         borderBottom: '0.5px solid ' + textColor,
@@ -11,7 +13,8 @@
     />
     <div class="error-message" v-if="!valid">Essa resposta é obrigatória.</div>
     <SubmitButton
-      text="Responder"
+      :text="presets.buttonText"
+      :prefix="presets.buttonPrefix"
       @submit="submitAnswer"
       :loading="loading"
     ></SubmitButton>
@@ -31,12 +34,19 @@ export default {
     formAnswer: {
       default: Object,
     },
+    valid: {
+      default: true,
+    },
+    loading: {
+      default: false,
+    },
+    presets: {
+      default: Object,
+    },
   },
   data() {
     return {
       isIncreasing: true,
-      loading: false,
-      valid: true,
       answer: null,
     };
   },
@@ -47,23 +57,52 @@ export default {
     textColor() {
       return this.$store.state.textColor;
     },
+    inputRules() {
+      return (() => {
+        switch (this.presets.rules) {
+          case "text":
+            return (answer) => answer !== null && answer.trim() !== "";
+          case "email":
+            return (answer) =>
+              /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+                answer
+              );
+          default:
+            return this.this.presets.rules;
+        }
+      })();
+    },
   },
   methods: {
     submitAnswer() {
-      if (this.answer !== null && this.answer.trim() !== "") {
-        this.loading = true;
-        return this.$emit("submitAnswer", {
-          fieldId: this.field.id,
-          answer: this.answer,
-        });
+      console.log("oi");
+      console.log(this.inputRules(this.answer));
+      if (
+        this.$store.state.submitRequest &&
+        this.$store.state.submitRequest.valid
+      ) {
+        console.log("eita");
+        this.$emit("updateValid", true);
+        return this.$emit("submitAnswer", this.$store.state.submitRequest);
       }
-
-      this.valid = false;
+      return this.$emit("updateValid", false);
+    },
+    updateRequest() {
+      this.$store.commit("setSubmitRequest", {
+        fieldId: this.field.id,
+        answer: this.answer,
+        valid: this.inputRules(this.answer),
+      });
     },
   },
   mounted() {
     if (this.formAnswer.answer) {
       this.answer = this.formAnswer.answer;
+      this.$store.commit("setSubmitRequest", {
+        fieldId: this.field.id,
+        answer: this.answer,
+        valid: this.inputRules(this.answer),
+      });
     }
   },
 };
@@ -76,13 +115,7 @@ input {
 }
 
 .error-message {
-  background-color: $color-error;
-  color: $color-white;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  width: fit-content;
-  padding: 4px;
-  font-size: 0.8vw;
+  @include text-error-message;
 }
 
 @media screen and (max-width: 768px) {

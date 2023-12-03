@@ -26,10 +26,10 @@ export default {
   name: "SubmitButton",
   props: {
     text: {
-      default: 0,
+      default: "Responder",
     },
     prefix: {
-      default: 0,
+      default: null,
     },
     loading: {
       default: false,
