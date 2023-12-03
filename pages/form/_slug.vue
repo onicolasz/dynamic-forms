@@ -95,8 +95,6 @@ export default {
         (item) => item.fieldId == answer.fieldId
       );
 
-      console.log(index);
-
       const body = {
         formId: this.apiData.id,
         fieldId: answer.fieldId,

@@ -59,6 +59,10 @@ export default {
     },
     inputRules() {
       return (() => {
+        if (this.presets.rules === undefined) {
+          return () => true;
+        }
+
         switch (this.presets.rules) {
           case "text":
             return (answer) => answer !== null && answer.trim() !== "";
@@ -75,13 +79,10 @@ export default {
   },
   methods: {
     submitAnswer() {
-      console.log("oi");
-      console.log(this.inputRules(this.answer));
       if (
         this.$store.state.submitRequest &&
         this.$store.state.submitRequest.valid
       ) {
-        console.log("eita");
         this.$emit("updateValid", true);
         return this.$emit("submitAnswer", this.$store.state.submitRequest);
       }
@@ -98,12 +99,13 @@ export default {
   mounted() {
     if (this.formAnswer.answer) {
       this.answer = this.formAnswer.answer;
-      this.$store.commit("setSubmitRequest", {
+      return this.$store.commit("setSubmitRequest", {
         fieldId: this.field.id,
         answer: this.answer,
         valid: this.inputRules(this.answer),
       });
     }
+    return this.updateRequest();
   },
 };
 </script>

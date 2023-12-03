@@ -32,8 +32,8 @@
     </fieldset>
     <div class="error-message" v-if="!valid">Essa resposta é obrigatória.</div>
     <SubmitButton
-      text="Enviar respostas"
-      prefix="check"
+      :text="presets.buttonText"
+      :prefix="presets.buttonPrefix"
       :loading="loading"
       @submit="submitAnswer"
     />
@@ -58,6 +58,9 @@ export default {
     },
     loading: {
       default: false,
+    },
+    presets: {
+      default: Object,
     },
   },
   data() {

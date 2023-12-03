@@ -99,9 +99,6 @@ export default {
     async submitAnswer(answer) {
       await this.$emit("submitAnswer", answer);
     },
-    getCheckboxId(index) {
-      return "check6vwbox" + index;
-    },
     getFieldComponent(fieldType) {
       switch (fieldType) {
         case "text":
@@ -110,6 +107,8 @@ export default {
           return TextField;
         case "checkbox":
           return CheckboxField;
+        case "endScreen":
+          return TextField;
         default:
           return TextField;
       }
@@ -125,6 +124,15 @@ export default {
           return {
             rules: "email",
             buttonText: "Responder",
+          };
+        case "endScreen":
+          return {
+            buttonText: "Responder",
+          };
+        case "checkbox":
+          return {
+            buttonText: "Enviar respostas",
+            buttonPrefix: "check",
           };
         default:
           return {};

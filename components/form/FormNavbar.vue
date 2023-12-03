@@ -47,10 +47,8 @@ export default {
         this.$store.state.submitRequest.valid
       ) {
         this.$emit("updateValid", true);
-        console.log(this.valid);
         return this.$emit("submitAnswer", this.$store.state.submitRequest);
       }
-      console.log(this.valid);
       return this.$emit("updateValid", false);
     },
   },
