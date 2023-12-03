@@ -204,11 +204,12 @@ export default {
 
 @media screen and (max-width: 768px) {
   .question-title {
-    font-size: 6vw;
+    font-size: 3vw;
   }
 
   .description {
-    font-size: 3.5vw;
+    font-size: 2vw;
+    margin-bottom: 2.5vw;
   }
 
   .field-container-item {
@@ -223,6 +224,7 @@ export default {
 
   .description {
     font-size: 3.5vw;
+    margin-bottom: 4.5vw;
   }
 
   .field-container-item {

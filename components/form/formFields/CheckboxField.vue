@@ -104,10 +104,6 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/css/main.scss";
 
-.field-container-btn button {
-  @include button-properties;
-}
-
 .error-message {
   color: $color-error;
   font-size: 0.9vw;
@@ -177,8 +173,8 @@ legend {
     font-size: 4vw;
   }
 
-  .field-container-btn button {
-    font-size: 4vw;
+  .error-message {
+    font-size: 1.5vw;
   }
 }
 
@@ -197,8 +193,8 @@ legend {
     font-size: 4vw;
   }
 
-  .field-container-btn button {
-    font-size: 4vw;
+  .error-message {
+    font-size: 3vw;
   }
 }
 </style>

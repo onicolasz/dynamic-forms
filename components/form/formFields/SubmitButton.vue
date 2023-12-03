@@ -52,11 +52,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../../assets/css/main.scss";
+
 .field-container-btn button {
   @include button-properties;
-  color: $color-black;
+  font-size: 1.2vw;
 }
-
 .loader {
   padding: 0 8px;
 }
@@ -96,7 +96,7 @@ export default {
 
 @media screen and (max-width: 768px) {
   .field-container-btn button {
-    font-size: 4vw;
+    font-size: 2vw;
   }
 }
 

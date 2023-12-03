@@ -72,17 +72,7 @@ export default {
 @import "../../../assets/css/main.scss";
 
 input {
-  border: none;
-  outline: none;
-  background-color: transparent;
-  padding: 2px 0;
-  position: relative;
-  width: 100%;
-  font-size: 1.5vw;
-
-  ::placeholder {
-    color: rgba(0, 0, 0, 0.267);
-  }
+  @include text-input-properties;
 }
 
 .error-message {
@@ -95,17 +85,13 @@ input {
   font-size: 0.8vw;
 }
 
-.field-container-btn button {
-  @include button-properties;
-}
-
 @media screen and (max-width: 768px) {
   input {
-    font-size: 5vw;
+    font-size: 3vw;
   }
 
-  .field-container-btn button {
-    font-size: 4vw;
+  .error-message {
+    font-size: 1.5vw;
   }
 }
 
@@ -114,8 +100,8 @@ input {
     font-size: 5vw;
   }
 
-  .field-container-btn button {
-    font-size: 4vw;
+  .error-message {
+    font-size: 3vw;
   }
 }
 </style>
