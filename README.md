@@ -2,7 +2,7 @@
 
 ## Informações
 
-Este projeto se trata de um teste prático, onde foi necessário implementar uma página de formulário, por este motivo a rota raiz do projeto localhost:300/ não tem conteúdo, recomendo ir direto para a página: http://localhost:3000/form/1.
+Este projeto se trata de um teste prático, onde foi necessário implementar uma página de formulário, por este motivo a rota raiz do projeto localhost:3000/ não tem conteúdo, recomendo ir direto para a página: http://localhost:3000/form/1.
 
 ## Como iniciar
 
