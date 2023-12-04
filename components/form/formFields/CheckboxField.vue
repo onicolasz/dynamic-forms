@@ -80,7 +80,9 @@ export default {
         this.loading = true;
         return this.$emit("submitAnswer", {
           fieldId: this.field.id,
-          answer: this.selected,
+          answer: this.selected.map((item) => {
+            return { id: item.id, value: item.value };
+          }),
         });
       }
 
@@ -89,19 +91,25 @@ export default {
     selectOption(option) {
       if (option.isActive) {
         this.$set(option, "isActive", false);
-        const index = this.selected.findIndex((item) => (item.id = option.id));
-        this.selected.slice(index, 1);
-        return this.$store.commit("setSubmitRequest", {
-          fieldId: this.field.id,
-          answer: this.selected,
-          valid: this.selected.length > 0,
-        });
+        const index = this.selected.findIndex((item) => item.id == option.id);
+        if (index !== -1) {
+          this.selected.splice(index, 1);
+          return this.$store.commit("setSubmitRequest", {
+            fieldId: this.field.id,
+            answer: this.selected.map((item) => {
+              return { id: item.id, value: item.value };
+            }),
+            valid: this.selected.length > 0,
+          });
+        }
       }
       this.$set(option, "isActive", true);
       this.selected.push(option);
       return this.$store.commit("setSubmitRequest", {
         fieldId: this.field.id,
-        answer: this.selected,
+        answer: this.selected.map((item) => {
+          return { id: item.id, value: item.value };
+        }),
         valid: this.selected.length > 0,
       });
     },
