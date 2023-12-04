@@ -127,6 +127,7 @@ export default {
           };
         case "endScreen":
           return {
+            rules: "text",
             buttonText: "Responder",
           };
         case "checkbox":
