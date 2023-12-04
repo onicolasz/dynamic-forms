@@ -8,7 +8,7 @@
       @keyup.enter="submitAnswer"
       :style="{
         color: textColor,
-        borderBottom: '0.5px solid ' + textColor,
+        borderBottom: '0.5px solid ' + (valid ? textColor : '#ff1744'),
       }"
     />
     <div class="error-message" v-if="!valid">Essa resposta é obrigatória.</div>

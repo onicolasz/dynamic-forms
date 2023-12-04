@@ -1,13 +1,10 @@
 <template>
   <div class="field-container-checkbox">
     <fieldset>
-      <legend
-        class="legend-text mb-2"
-        :style="{ color: textColor, opacity: 0.7 }"
-      >
+      <legend class="legend" :style="{ color: textColor, opacity: 0.7 }">
         <font-awesome-icon
           :icon="['fas', 'list']"
-          style="width: 1vw; height: 1vw"
+          class="legend"
         ></font-awesome-icon>
         Selecione quantos itens desejar.
       </legend>
@@ -182,7 +179,7 @@ legend {
 }
 
 @media screen and (max-width: 768px) {
-  .legend-text {
+  .legend {
     font-size: 3vw;
   }
 
@@ -202,7 +199,7 @@ legend {
 }
 
 @media screen and (max-width: 480px) {
-  .legend-text {
+  .legend {
     font-size: 3vw;
   }
 
